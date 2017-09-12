@@ -30,7 +30,7 @@ exports.create = function(req, res) {
   listing.save(function(err) {
     if(err) {
       console.log(err);
-      res.status(400).send(err);
+      res.status(404).send(err);
     } else {
       res.json(listing);
     }
@@ -45,11 +45,30 @@ exports.read = function(req, res) {
 
 /* Update a listing */
 exports.update = function(req, res) {
-  var listing = req.listing;
-
   /* Replace the article's properties with the new properties found in req.body */
+  var listing = req.listing;
+  
+  listing.name = req.body.name;
+  listing.code = req.body.code;
+  listing.address = req.body.address;
+
   /* save the coordinates (located in req.results if there is an address property) */
+  if(req.results) {
+    listing.coordinates = {
+      latitude: req.results.lat, 
+      longitude: req.results.lng
+    };
+  }
+  
   /* Save the article */
+  listing.save(function(err) {
+    if(err) {
+      console.log(err);
+      res.status(400).send(err);
+    } else {
+      res.json(listing);
+    }
+  });
 };
 
 /* Delete a listing */
@@ -57,11 +76,29 @@ exports.delete = function(req, res) {
   var listing = req.listing;
 
   /* Remove the article */
+    listing.remove(function(err) {
+      if(err) {
+        console.log(err);
+        res.status(400).send(err);
+      } else {
+        res.json(listing);
+        console.log('Listing Successfully Deleted');
+      }
+    });
 };
 
 /* Retreive all the directory listings, sorted alphabetically by listing code */
 exports.list = function(req, res) {
   /* Your code here */
+  Listing.find({},null,{sort:{code: 1 }}, function(err, listings) {
+    res.json(listings);
+    // if(err) {
+    //   console.log(err);
+    //   res.status(400).send(err);
+    // } else {
+    //   res.json(listings);
+    // }
+  });
 };
 
 /* 

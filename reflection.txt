@@ -1,0 +1,16 @@
+The controller used in this project serves to establish how the project responds to requests from the client.
+
+In the controller there are several exported/defined routing options.
+
+The controller defines how a 'create' request should check for coordinates and then save a listing.
+
+The controller defines how a 'read' request should return the listings.
+
+The controller defines how a 'update' request should take the update info, overwrite the old info, and save the result.
+
+The controller defines how a 'delete' request should cause the corresponding listing to be deleted.
+
+All of these implemented function exports are then utilized in the express configuration to specify which routing middlewares need to be used upon each request.
+
+The use of middlewares allowed all the routing functionality to be written completely seperately from the config/server functionality.
+
